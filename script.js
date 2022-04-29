@@ -36,6 +36,8 @@ function validate(nameValue, urlValue) {
 function buildBookmarks() {
   // Build items
   bookmarks.forEach(bookmark => {
+    // Remove all bookmark elements
+    bookmarksContainer.textContent = '';
     const { name, url } = bookmark;
     // Item
     const item = document.createElement('div');
@@ -77,10 +79,24 @@ function fetchBookmarks() {
       { name: 'Stack Overflow', url: 'https://stackoverflow.com' },
       { name: 'MDN', url: 'https://developer.mozilla.org' }
     ];
-    console.log(bookmarks);
+
     localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
   }
   buildBookmarks();
+}
+
+
+// Delete Bookmark
+function deleteBookmark(url) {
+  bookmarks.forEach((bookmark, index) => {
+    if (bookmark.url === url) {
+      bookmarks.splice(index, 1);
+    }
+  });
+
+  // Update bookmarks array in localStorage
+  localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+  fetchBookmarks();
 }
 
 
