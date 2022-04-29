@@ -6,6 +6,7 @@ const websiteNameEl = document.getElementById('website-name');
 const websiteUrlEl = document.getElementById('website-url');
 const bookmarksContainer = document.getElementById('bookmarks-container');
 
+let bookmarks = [];
 
 // Show Modal, Focus on Input
 function showModal() {
@@ -31,6 +32,24 @@ function validate(nameValue, urlValue) {
 }
 
 
+// Fetch Bookmarks
+function fetchBookmarks() {
+  // Get bookmarks from localStorage if available
+  if (localStorage.getItem('bookmarks')) {
+    bookmarks = JSON.parse(localStorage.getItem('bookmarks'));
+  } else {
+    // Create bookmarks array in localStorage
+    bookmarks = [
+      { name: 'Github', url: 'https://github.com' },
+      { name: 'Stack Overflow', url: 'https://stackoverflow.com' },
+      { name: 'MDN', url: 'https://developer.mozilla.org' }
+    ];
+    console.log(bookmarks);
+    localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+  }
+}
+
+
 // handle Data from Form
 function storeBookmark(event) {
   event.preventDefault();
@@ -39,11 +58,18 @@ function storeBookmark(event) {
   if (!urlValue.includes('http://', 'https://')) {
     urlValue = `https://${urlValue}`;
   }
-  console.log(nameValue, urlValue);
-  validate(nameValue, urlValue);
   if (!validate(nameValue, urlValue)) {
     return false;
   }
+  const bookmark = {
+    name: nameValue,
+    url: urlValue
+  };
+  bookmarks.push(bookmark);
+  localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+  fetchBookmarks();
+  bookmarkForm.reset();
+  websiteNameEl.focus();
 }
 
 
@@ -54,3 +80,6 @@ window.addEventListener('click', e => e.target === modal ? modal.classList.remov
 
 // Event Listener
 bookmarkForm.addEventListener('submit', storeBookmark);
+
+// On Load
+fetchBookmarks();
