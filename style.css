@@ -90,3 +90,10 @@ a:active {
   height: 25px;
   width: 25px;
 }
+
+/* Media Query: Large Smartphone (Vertical) */
+@media screen and (max-width: 600px) {
+  .container {
+    flex-direction: column;
+  }
+}
